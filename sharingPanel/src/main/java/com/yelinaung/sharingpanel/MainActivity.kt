@@ -5,8 +5,10 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -28,6 +30,18 @@ class MainActivity : AppCompatActivity(), ShareAdapter.ItemListener {
     // forget builder pattern. long live named arguments!
     items = getShareableItems(context = this, isImage = isImage)
     shareAdapter.setData(items)
+
+    val bottomSheetBehavior = BottomSheetBehavior.from<View>(rvSharePanel)
+    bottomSheetBehavior.isHideable = true
+    bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+      override fun onStateChanged(bottomSheet: View, newState: Int) {
+        if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+          finish()
+        }
+      }
+
+      override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+    })
   }
 
   override fun clickOnItem(position: Int) {
